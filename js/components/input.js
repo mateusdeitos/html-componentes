@@ -1,21 +1,16 @@
 const Campo = require('./campo');
 
-function Input(id, value, attributes, classes) {
-	attributes = attributes || {};
-	attributes.id = id;
-	attributes.value = value;
+function Input(attributes) {
+	Campo.call(this, "<input>");
+	this.addAttributes(attributes);
 
-	Campo.call(this, "<input>", {
-		attr: attributes || {},
-		class: classes || []
-	});
-
-	this.TypeNumber = function () {
-		this.setAttribute("type", "number");
+	this.setId = function (id) {
+		this.addAttributes({ id });
 		return this;
 	};
-	this.TypeText = function () {
-		this.setAttribute("type", "text");
+
+	this.setValue = function (value) {
+		this.addAttributes({ value });
 		return this;
 	};
 }

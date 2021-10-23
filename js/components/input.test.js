@@ -4,17 +4,17 @@ const Input = require('./input')
 describe('Testes render', () => {
 	it('render sem nada', () => {
 		var input = new Input();
-		expect(input.render()).toBe("<input>");
+		expect(input.getHtml()).toBe("<input>");
 	});
 
 	it('render completo', () => {
-		var input = new Input("id-input", "valor-input", { maxlength: 10 }, ["form-control input"]);
-		expect(input.render()).toBe("<input class=\"form-control input\" maxlength=\"10\" id=\"id-input\" value=\"valor-input\">");
+		var input = new Input({ id: "id-input", value: "valor-input", maxlength: 10 }).addClass(["input", "form-control"]);
+		expect(input.getHtml()).toBe("<input id=\"id-input\" value=\"valor-input\" maxlength=\"10\" class=\"input form-control\">");
 
-		input.TypeNumber();
-		expect(input.render()).toBe("<input class=\"form-control input\" maxlength=\"10\" id=\"id-input\" value=\"valor-input\" type=\"number\">");
+		input.setAttribute("type", "number");
+		expect(input.getHtml()).toBe("<input id=\"id-input\" value=\"valor-input\" maxlength=\"10\" class=\"input form-control\" type=\"number\">");
 
-		input.TypeText();
-		expect(input.render()).toBe("<input class=\"form-control input\" maxlength=\"10\" id=\"id-input\" value=\"valor-input\" type=\"text\">");
+		input.setAttribute("type", "text");
+		expect(input.getHtml()).toBe("<input id=\"id-input\" value=\"valor-input\" maxlength=\"10\" class=\"input form-control\" type=\"text\">");
 	});
 })

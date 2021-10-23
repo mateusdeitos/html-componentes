@@ -1,20 +1,41 @@
+function Base(tag) {
+	$.extend(this, $(tag));
+}
 
-function Campo(tag, _config) {
-	this.config = $.extend({
-		class: [],
-		attr: {},
-	}, _config);
+function Events() {
+	this.onClick = function (callback) {
+		this.on("click", callback);
+		return this;
+	}
 
-	this.tag = tag;
+	this.offClick = function (callback) {
+		this.off("click", callback);
+		return this;
+	}
 
-	var parseClasses = function (classes) {
-		if (Array.isArray(classes)) {
-			if (!classes.length) return null;
-			return classes.join(" ");
-		}
+	this.onChange = function (callback) {
+		this.on("change", callback);
+		return this;
+	}
 
-		return classes;
-	};
+	this.onKeyDown = function (callback) {
+		this.on("keydown", callback);
+		return this;
+	}
+
+	this.onFocus = function (callback) {
+		this.on("focus", callback);
+		return this;
+	}
+
+	this.onBlur = function (callback) {
+		this.on("blur", callback);
+		return this;
+	}
+}
+function Campo(tag) {
+	Base.call(this, tag);
+	Events.call(this);
 
 	var parseAttributes = function (attributes) {
 		if (!attributes) return {};
@@ -26,50 +47,24 @@ function Campo(tag, _config) {
 		return {};
 	};
 
-	this.$ = $(this.tag, {
-		class: parseClasses(this.config.class),
-		attr: parseAttributes(this.config.attr),
-	});
-
-	this.render = function () {
-		return this.$.prop("outerHTML");
-	};
-
-	this.setAttribute = function (key, value) {
-		if (!key) {
-			return this;
-		}
-
-		if ([undefined, null, ""].indexOf(value) > -1) {
-			value = null;
-		}
-
-		this.$.attr(key, value);
-
+	this.setAttribute = function (name, value) {
+		this.attr(name, value);
 		return this;
-	};
-
-	this.addClass = function (_class) {
-		this.$.addClass(_class);
 	}
 
-	this.removeClass = function (_class) {
-		this.$.removeClass();
+	this.addAttributes = function (attributes) {
+		this.attr(parseAttributes(attributes));
+		return this;
 	}
 
-	this.setClasses = function (classes) {
-		var _classes = parseClasses(classes);
-		this.addClass(_classes);
-
+	this.children = function (children) {
+		this.append(children);
 		return this;
-	};
+	}
 
-	this.setAttributes = function (attributes) {
-		var attr = parseAttributes(attributes);
-		Object.keys(attr).forEach(function (key) {
-			this.setAttribute(key, attr[key]);
-		}.bind(this));
-	};
+	this.getHtml = function () {
+		return this.prop("outerHTML");
+	}
 
 	return this;
 }
